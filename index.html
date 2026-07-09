@@ -1,1131 +1,498 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SCIPNET // Fondation SCP — Ayinvox Studio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fondation SCP — Site-53 // Base de Données</title>
+
+<!-- =========================================================
+     ╔══════════════════════════════════════════════════════╗
+     ║  GABARIT RÉUTILISABLE — WIKI SCP / WIKI BACKROOMS     ║
+     ║  Pour adapter ce fichier au Wiki Backrooms :          ║
+     ║  1. Change les variables CSS dans :root (couleurs)    ║
+     ║  2. Remplace "SCP" / "Fondation" / "Site-53" par tes  ║
+     ║     propres noms (recherche "Site-53" et "Fondation") ║
+     ║  3. Remplace le logo (voir bloc LOGO plus bas)        ║
+     ║  4. Remplace les cartes d'objets par tes propres      ║
+     ║     entités / niveaux / classes                       ║
+     ╚══════════════════════════════════════════════════════╝
+     ========================================================= -->
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
 <style>
-/* ============================================================
-   TOKENS
-   ============================================================ */
-:root{
-  /* Thème général strictement Noir / Blanc / Gris pour toute l'interface. */
-  --bg:#070707;
-  --bg-panel:#101010;
-  --bg-panel-alt:#161616;
-  --bg-raised:#1c1c1c;
-  --border:#2c2c2c;
-  --border-soft:#1d1d1d;
-  --text:#f1f1ef;
-  --text-dim:#a3a3a0;
-  --text-faint:#5c5c59;
-  --accent:#d8d8d5;
-  --accent-dim:#8a8a87;
-  --accent-soft:rgba(255,255,255,0.07);
-  --red:#eaeae7;
-  --red-dim:#ffffff;
-  --green:#5a5a57;
-  --green-dim:#3a3a38;
-  --gray:#6e6e6b;
-  --blue:#848480;
-  --font-display:'Oswald',sans-serif;
-  --font-body:'IBM Plex Sans',sans-serif;
-  --font-mono:'Share Tech Mono',monospace;
-  --radius:3px;
+  /* =========================================================
+     TOKENS DE THÈME — à modifier pour Backrooms
+     ========================================================= */
+  :root {
+    /* Couleurs de base */
+    --bg:          #0a0a0a;
+    --bg-panel:    #121212;
+    --bg-raised:   #161616;
+    --border:      #272727;
+    --border-soft: #1a1a1a;
 
-  /* Couleurs dédiées UNIQUEMENT aux Classes de Confinement, Risque,
-     Perturbation, Niveaux de Menace et Relation GdI (ACS + tableaux). */
-  --c-safe:#3f9d6f;
-  --c-euclid:#c9973a;
-  --c-keter:#a13030;
-  --c-neutralized:#7a828a;
-  --c-notice:#3f9d6f;
-  --c-caution:#8bb04f;
-  --c-warning:#c9973a;
-  --c-danger:#c9701f;
-  --c-critical:#a13030;
-  --c-apollyon:#5a1414;
-  --c-dark:#7a828a;
-  --c-vlam:#5f7ea8;
-  --c-keneq:#c9973a;
-  --c-ekhi:#c9701f;
-  --c-amida:#a13030;
-  --c-faible:#3f9d6f;
-  --c-modere:#c9973a;
-  --c-eleve:#c9701f;
-  --c-extreme:#a13030;
-  --c-cooperatif:#3f9d6f;
-  --c-neutre:#7a828a;
-  --c-hostile:#a13030;
-}
+    /* Texte */
+    --text:        #ededea;
+    --text-dim:    #9a9a9a;
+    --text-faint:  #55555a;
 
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--font-body);
-  min-height:100vh;
-  width:100%;
-  overflow-x:hidden;
-}
-body{
-  background-image:
-    radial-gradient(circle at 20% 10%, rgba(255,255,255,0.035), transparent 40%),
-    radial-gradient(circle at 80% 90%, rgba(255,255,255,0.025), transparent 40%);
-}
-::selection{background:var(--accent-dim);color:#fff;}
-button{font-family:inherit;cursor:pointer;}
-input{font-family:inherit;}
-a{color:var(--accent);text-decoration:none;}
-::-webkit-scrollbar{width:10px;height:10px;}
-::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px;}
-::-webkit-scrollbar-thumb:hover{background:var(--accent-dim);}
+    /* Accent principal (rouge SCP) — remplace par ta teinte pour Backrooms */
+    --accent:      #c62828;
+    --accent-2:    #8f1d1d;
+    --accent-glow: rgba(198, 40, 40, 0.35);
 
-.hidden{display:none !important;}
-.fade-out{animation:fadeOut .6s ease forwards;}
-.fade-in{animation:fadeIn .6s ease forwards;}
-@keyframes fadeOut{from{opacity:1;}to{opacity:0;visibility:hidden;}}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    /* Classes d'objets (garder ce triptyque, universel) */
+    --safe:    #4ade80;
+    --euclid:  #e8a13a;
+    --keter:   #c62828;
+  }
 
-/* ============================================================
-   1. GATE D'AUTHENTIFICATION
-   ============================================================ */
-#gate{
-  position:fixed;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--bg);
-  z-index:500;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-.gate-box{
-  width:min(420px,88vw);
-  border:1px solid var(--border);
-  background:var(--bg-panel);
-  padding:36px 32px 30px;
-  position:relative;
-}
-.gate-box::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--accent-dim),var(--accent),var(--accent-dim));
-}
-.gate-seal{
-  width:56px;height:56px;margin:0 auto 18px;
-  border:2px solid var(--accent);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--accent);
-}
-.gate-seal svg{width:30px;height:30px;}
-.gate-eyebrow{
-  text-align:center;font-family:var(--font-mono);
-  font-size:11px;letter-spacing:3px;color:var(--text-faint);
-  margin-bottom:4px;text-transform:uppercase;
-}
-.gate-title{
-  text-align:center;font-family:var(--font-display);
-  font-size:22px;letter-spacing:2px;text-transform:uppercase;
-  color:var(--text);margin-bottom:22px;font-weight:600;
-}
-.gate-field-label{
-  font-family:var(--font-mono);font-size:11px;color:var(--text-dim);
-  letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px;
-}
-.gate-input-row{display:flex;gap:0;border:1px solid var(--border);}
-#gate-password{
-  flex:1;background:var(--bg-raised);border:none;outline:none;
-  color:var(--text);padding:12px 14px;font-family:var(--font-mono);
-  font-size:14px;letter-spacing:2px;
-}
-#gate-password:focus{background:#202020;}
-#gate-submit{
-  background:var(--accent-dim);border:none;color:#070707;
-  padding:0 18px;font-family:var(--font-display);
-  font-weight:600;letter-spacing:1px;text-transform:uppercase;
-  font-size:13px;transition:background .15s;
-}
-#gate-submit:hover{background:var(--accent);}
-#gate-error{
-  margin-top:14px;color:var(--red);font-family:var(--font-mono);
-  font-size:12.5px;letter-spacing:1px;text-align:center;
-  min-height:16px;visibility:hidden;
-}
-#gate-error.show{visibility:visible;animation:shake .35s ease;}
-@keyframes shake{
-  0%,100%{transform:translateX(0);}
-  20%{transform:translateX(-6px);}
-  40%{transform:translateX(6px);}
-  60%{transform:translateX(-4px);}
-  80%{transform:translateX(4px);}
-}
-.gate-foot{
-  margin-top:20px;text-align:center;font-family:var(--font-mono);
-  font-size:10px;color:var(--text-faint);letter-spacing:1px;
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    position: relative;
+  }
 
-/* ============================================================
-   2. TERMINAL SCIPNET
-   ============================================================ */
-#terminal{
-  position:fixed;inset:0;background:#040404;z-index:400;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-mono);
-}
-.term-box{
-  width:min(680px,90vw);
-  height:min(420px,70vh);
-  border:1px solid #232323;
-  background:#0a0a0a;
-  padding:22px 26px;
-  box-shadow:0 0 60px rgba(255,255,255,0.05);
-  display:flex;flex-direction:column;
-}
-.term-header{
-  display:flex;align-items:center;gap:8px;margin-bottom:14px;
-  color:var(--text-dim);font-size:11px;letter-spacing:2px;
-  border-bottom:1px solid #1a1a1a;padding-bottom:10px;
-}
-.term-dot{width:7px;height:7px;border-radius:50%;background:var(--text-dim);opacity:.7;}
-#term-lines{
-  flex:1;overflow-y:auto;color:var(--text);font-size:14px;line-height:1.8;
-  white-space:pre-wrap;
-}
-.term-line-prompt{color:var(--text-faint);}
-#term-lines::-webkit-scrollbar{width:0;}
-.term-cursor{display:inline-block;width:8px;height:14px;background:var(--text);
-  animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px;}
-@keyframes blink{0%,50%{opacity:1;}50.01%,100%{opacity:0;}}
+  .font-display { font-family: 'Anton', sans-serif; }
+  .font-mono    { font-family: 'JetBrains Mono', monospace; }
 
-/* ============================================================
-   3. APP SHELL
-   ============================================================ */
-#app{display:none;min-height:100vh;flex-direction:column;}
-#app.visible{display:flex;}
+  ::selection { background: var(--accent-2); color: #fff; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent-2); }
 
-header.topbar{
-  position:sticky;top:0;z-index:100;
-  background:rgba(7,7,7,0.94);backdrop-filter:blur(6px);
-  border-bottom:1px solid var(--border);
-}
-.topbar-inner{
-  max-width:1280px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 22px;height:64px;
-}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand-seal{
-  width:34px;height:34px;border:1.5px solid var(--accent);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;
-}
-.brand-seal svg{width:18px;height:18px;}
-.brand-text{display:flex;flex-direction:column;line-height:1.15;}
-.brand-text b{
-  font-family:var(--font-display);font-size:15px;letter-spacing:1.5px;
-  text-transform:uppercase;color:var(--text);
-}
-.brand-text span{font-family:var(--font-mono);font-size:9.5px;color:var(--text-faint);letter-spacing:1px;}
+  /* ─── Bruit de fond ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+  }
 
-nav.desktop-nav{display:flex;gap:2px;}
-nav.desktop-nav button{
-  background:none;border:none;color:var(--text-dim);
-  font-family:var(--font-display);font-size:12.5px;letter-spacing:0.8px;
-  text-transform:uppercase;padding:10px 12px;border-bottom:2px solid transparent;
-  transition:color .15s, border-color .15s;
-}
-nav.desktop-nav button:hover{color:var(--text);}
-nav.desktop-nav button.active{color:var(--accent);border-bottom-color:var(--accent);}
+  /* ─── Grille + vignette hero ─── */
+  .hero-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .hero-vignette {
+    background: radial-gradient(ellipse 70% 60% at 50% 40%, var(--accent-glow) 0%, transparent 70%);
+  }
 
-.burger{
-  display:none;flex-direction:column;gap:4px;background:none;border:none;padding:8px;
-}
-.burger span{width:22px;height:2px;background:var(--text);display:block;transition:transform .2s, opacity .2s;}
-.burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
-.burger.open span:nth-child(2){opacity:0;}
-.burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+  /* ─── Ligne de scan rouge ─── */
+  .scan-line { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 2; }
+  .scan-line::after {
+    content: '';
+    position: absolute; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent) 40%, var(--accent) 60%, transparent);
+    opacity: 0.5;
+    animation: scan 6s linear infinite;
+  }
+  @keyframes scan {
+    0%   { transform: translateY(-10%); }
+    100% { transform: translateY(110vh); }
+  }
 
-nav.mobile-nav{
-  display:none;flex-direction:column;background:var(--bg-panel);
-  border-bottom:1px solid var(--border);overflow:hidden;max-height:0;
-  transition:max-height .3s ease;
-}
-nav.mobile-nav.open{max-height:520px;}
-nav.mobile-nav button{
-  background:none;border:none;color:var(--text-dim);text-align:left;
-  font-family:var(--font-display);font-size:13px;letter-spacing:1px;text-transform:uppercase;
-  padding:14px 22px;border-bottom:1px solid var(--border-soft);
-}
-nav.mobile-nav button.active{color:var(--accent);background:var(--accent-soft);}
+  /* ─── Curseur clignotant ─── */
+  .cursor-blink::after {
+    content: '▌';
+    color: var(--accent);
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
 
-@media (max-width:900px){
-  nav.desktop-nav{display:none;}
-  .burger{display:flex;}
-  nav.mobile-nav{display:flex;}
-}
+  /* ─── Tampon "CLASSIFIÉ" ─── */
+  .stamp {
+    display: inline-block;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    padding: 5px 14px;
+    transform: rotate(-4deg);
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
 
-main{flex:1;max-width:1280px;margin:0 auto;width:100%;padding:34px 22px 80px;}
+  /* ─── Bandeau ticker de classification ─── */
+  .ticker-wrap {
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--bg-panel);
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .ticker-track {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    padding: 10px 0;
+    animation: ticker 32s linear infinite;
+  }
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-track span.dot { color: var(--accent); margin: 0 14px; }
 
-.section{display:none;}
-.section.active{display:block;animation:fadeIn .35s ease;}
+  /* ─── Navigation ─── */
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 6px 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-link:hover { color: var(--text); border-color: var(--accent); }
 
-.section-head{margin-bottom:26px;border-left:3px solid var(--accent);padding-left:14px;}
-.section-eyebrow{
-  font-family:var(--font-mono);font-size:11px;color:var(--text-faint);
-  letter-spacing:2px;text-transform:uppercase;
-}
-.section-title{
-  font-family:var(--font-display);font-size:28px;letter-spacing:1px;
-  text-transform:uppercase;color:var(--text);font-weight:600;
-}
+  /* ─── Tags de classification ─── */
+  .tag-class {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+  }
 
-.dev-notice{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:100px 20px;text-align:center;color:var(--text-faint);
-}
-.dev-notice b{
-  font-family:var(--font-display);font-size:20px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--text-dim);margin-top:22px;
-}
-.dev-notice span{font-family:var(--font-mono);font-size:12px;margin-top:8px;letter-spacing:1px;}
-.dev-spinner{
-  animation:scp-spin 5s linear infinite;
-}
-@keyframes scp-spin{ to{ transform:rotate(360deg); } }
+  /* ─── Boutons ─── */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #0a0a0a; background: var(--text);
+    border: 1px solid var(--text);
+    padding: 11px 24px;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    cursor: pointer; text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-/* ---------- Accueil ---------- */
-.home-grid{display:grid;grid-template-columns:2fr 1fr;gap:22px;}
-@media (max-width:900px){.home-grid{grid-template-columns:1fr;}}
-.panel{
-  background:var(--bg-panel);border:1px solid var(--border);padding:22px 24px;
-}
-.panel h3{
-  font-family:var(--font-display);font-size:15px;letter-spacing:1.5px;
-  text-transform:uppercase;color:var(--accent);margin-bottom:14px;
-  display:flex;align-items:center;gap:8px;
-}
-.panel p{color:var(--text-dim);font-size:14px;line-height:1.7;margin-bottom:10px;}
-.news-item{border-bottom:1px solid var(--border-soft);padding:12px 0;}
-.news-item:last-child{border-bottom:none;}
-.news-date{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);}
-.news-title{font-size:14px;color:var(--text);margin-top:3px;}
-.director-note{
-  font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);
-  line-height:1.9;border-left:2px solid var(--accent-dim);padding-left:12px;
-}
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 11px 24px;
+    transition: color 0.2s, border-color 0.2s;
+    cursor: pointer; background: transparent; text-decoration: none;
+  }
+  .btn-outline:hover { color: var(--text); border-color: var(--accent); }
 
-/* ---------- Tables ---------- */
-.data-table{width:100%;border-collapse:collapse;background:var(--bg-panel);border:1px solid var(--border);}
-.data-table thead th{
-  text-align:left;font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;
-  text-transform:uppercase;color:var(--text-faint);padding:12px 16px;border-bottom:1px solid var(--border);
-}
-.data-table tbody tr{border-bottom:1px solid var(--border-soft);cursor:pointer;transition:background .12s;}
-.data-table tbody tr:hover{background:var(--bg-raised);}
-.data-table tbody td{padding:12px 16px;font-size:13.5px;color:var(--text);vertical-align:middle;}
-.row-logo{display:flex;align-items:center;gap:10px;}
+  /* ─── Cartes objets ─── */
+  .object-card {
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+    position: relative;
+    transition: border-color 0.25s, transform 0.25s;
+    overflow: hidden;
+  }
+  .object-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .object-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--class-color, var(--accent));
+    opacity: 0.8;
+  }
 
-.logo-wrap{
-  width:36px;height:36px;border-radius:50%;flex-shrink:0;position:relative;
-  background:var(--bg-raised);border:1px dashed var(--border);
-  display:flex;align-items:center;justify-content:center;overflow:hidden;
-  color:var(--text-faint);
-}
-.logo-wrap img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
-.logo-wrap .logo-fallback{width:44%;height:44%;display:flex;}
-.logo-wrap .logo-fallback svg{width:100%;height:100%;}
-.logo-wrap.lg{width:64px;height:64px;}
+  /* ─── Barre de rédaction (texte censuré) ─── */
+  .redacted {
+    background: var(--text);
+    color: transparent;
+    border-radius: 1px;
+    user-select: none;
+    padding: 0 2px;
+  }
 
-.badge{
-  display:inline-flex;align-items:center;gap:6px;padding:4px 10px;
-  font-family:var(--font-mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;
-  border-radius:2px;border:1px solid currentColor;
-}
-.badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+  /* ─── Pastille de classe d'objet ─── */
+  .class-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 
-/* ---------- Departements ---------- */
-.dept-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-@media (max-width:1000px){.dept-grid{grid-template-columns:repeat(2,1fr);}}
-@media (max-width:560px){.dept-grid{grid-template-columns:1fr;}}
-.dept-card{
-  background:var(--bg-panel);border:1px solid var(--border);padding:30px 18px;
-  display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;
-  cursor:pointer;transition:transform .15s, border-color .15s;position:relative;overflow:hidden;
-}
-.dept-card:hover{border-color:var(--accent-dim);transform:translateY(-3px);}
-.dept-card .accent-bar{position:absolute;top:0;left:0;right:0;height:4px;}
-.dept-card b{
-  font-family:var(--font-display);font-size:15px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);
-}
-.dept-card span{font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);letter-spacing:1px;}
+  /* ─── Point de statut animé ─── */
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    display: inline-block; flex-shrink: 0;
+    animation: statusPulse 1.6s ease-in-out infinite;
+  }
+  .status-dot.online      { background: var(--safe);   box-shadow: 0 0 6px var(--safe); }
+  .status-dot.maintenance { background: var(--euclid); box-shadow: 0 0 6px var(--euclid); }
+  @keyframes statusPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.35; transform: scale(0.75); }
+  }
 
-/* ---------- ACS Hub ---------- */
-.acs-hub{display:flex;flex-direction:column;gap:30px;margin-bottom:46px;}
-.acs-group-title{
-  font-family:var(--font-mono);font-size:12px;letter-spacing:2px;color:var(--text-faint);
-  text-transform:uppercase;margin-bottom:12px;
-}
-.acs-rows{display:flex;flex-direction:column;gap:6px;}
-.acs-row{
-  display:flex;align-items:stretch;border:1px solid var(--border);cursor:pointer;
-  background:var(--bg-panel);transition:transform .12s;
-}
-.acs-row:hover{transform:translateX(3px);}
-.acs-color-bar{width:6px;flex-shrink:0;}
-.acs-row-body{
-  flex:1;display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;gap:14px;
-}
-.acs-row-label{font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;color:var(--text-faint);text-transform:uppercase;}
-.acs-row-name{
-  font-family:var(--font-display);font-size:19px;letter-spacing:1px;text-transform:uppercase;
-  color:var(--text);font-weight:600;flex:1;padding-left:10px;
-}
-.acs-row-level{font-family:var(--font-display);font-size:22px;font-weight:700;width:26px;text-align:center;}
-.acs-icon{
-  width:34px;height:34px;border-radius:50%;flex-shrink:0;position:relative;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;border:2px dashed currentColor;
-}
-.acs-icon img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
-.acs-icon .logo-fallback{width:44%;height:44%;display:flex;}
-.acs-icon .logo-fallback svg{width:100%;height:100%;}
+  /* ─── Panneau stat ─── */
+  .stat-block { border-left: 1px solid var(--border); padding-left: 18px; }
 
-/* ---------- Modal ---------- */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(3,4,5,0.78);z-index:600;
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  opacity:0;visibility:hidden;transition:opacity .2s;
-}
-.modal-overlay.open{opacity:1;visibility:visible;}
-.modal-box{
-  width:min(560px,100%);max-height:82vh;overflow-y:auto;
-  background:var(--bg-panel);border:1px solid var(--border);position:relative;
-  transform:translateY(14px);transition:transform .22s;
-}
-.modal-overlay.open .modal-box{transform:translateY(0);}
-.modal-watermark{
-  position:absolute;top:0;right:0;width:220px;height:220px;opacity:0.05;
-  display:flex;align-items:center;justify-content:center;pointer-events:none;
-}
-.modal-watermark svg,.modal-watermark img{width:100%;height:100%;object-fit:contain;}
-.modal-close{
-  position:absolute;top:14px;right:14px;width:30px;height:30px;border:none;
-  background:var(--bg-raised);color:var(--text-dim);border-radius:50%;
-  font-size:16px;line-height:1;z-index:2;transition:color .15s, background .15s;
-}
-.modal-close:hover{color:var(--text);background:var(--red-dim);}
-.modal-content{padding:30px 28px;position:relative;z-index:1;}
-.modal-eyebrow{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);letter-spacing:2px;text-transform:uppercase;}
-.modal-title{
-  font-family:var(--font-display);font-size:24px;letter-spacing:1px;text-transform:uppercase;
-  color:var(--text);margin:6px 0 16px;font-weight:600;
-}
-.modal-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-.modal-body-text{color:var(--text-dim);font-size:14px;line-height:1.8;}
-.modal-body-text b{color:var(--text);}
-.modal-divider{height:1px;background:var(--border);margin:16px 0;}
-.redacted{background:#1a1a1a;color:#1a1a1a;padding:0 4px;border-radius:2px;user-select:none;}
+  /* ─── Divider ─── */
+  .divider { border: none; border-top: 1px solid var(--border-soft); }
 
-/* Footer */
-footer{
-  border-top:1px solid var(--border);padding:20px 22px;text-align:center;
-  font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);letter-spacing:1px;
-}
+  /* ─── Panneau footer ─── */
+  .footer-panel {
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+  }
+  .footer-row {
+    display: flex; justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+  .footer-row:last-child { border-bottom: none; }
 </style>
 </head>
+
 <body>
 
-<!-- ============================================================
-     ÉTAPE 1 — GATE D'AUTHENTIFICATION
-     ============================================================ -->
-<div id="gate">
-  <div class="gate-box">
-    <div class="gate-seal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18" stroke-opacity=".4"/><circle cx="12" cy="12" r="3.2"/></svg>
-    </div>
-    <div class="gate-eyebrow">Fondation SCP — Ayinvox Studio</div>
-    <div class="gate-title">Accès Restreint</div>
-    <label class="gate-field-label" for="gate-password">Code d'accréditation</label>
-    <div class="gate-input-row">
-      <input type="password" id="gate-password" autocomplete="off" placeholder="••••••••••">
-      <button id="gate-submit">Valider</button>
-    </div>
-    <div id="gate-error">ACCÈS REFUSÉ — IDENTIFIANTS INCORRECTS</div>
-    <div class="gate-foot">SCIPNET // TERMINAL SÉCURISÉ // TOUTE TENTATIVE EST JOURNALISÉE</div>
-  </div>
-</div>
-
-<!-- ============================================================
-     ÉTAPE 2 — TERMINAL SCIPNET
-     ============================================================ -->
-<div id="terminal" class="hidden">
-  <div class="term-box">
-    <div class="term-header"><span class="term-dot"></span> SCIPNET — CONNEXION SÉCURISÉE</div>
-    <div id="term-lines"></div>
-  </div>
-</div>
-
-<!-- ============================================================
-     ÉTAPE 3 — APPLICATION WIKI
-     ============================================================ -->
-<div id="app">
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="brand-seal">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+  <!-- =========================================================
+       HEADER
+       ========================================================= -->
+  <header class="fixed top-0 left-0 right-0 z-50" style="background: rgba(10,10,10,0.92); backdrop-filter: blur(8px); border-bottom:1px solid var(--border-soft);">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
+      <a href="#top" class="flex items-center gap-3 flex-shrink-0">
+        <!--
+          ╔══════════════════ LOGO ══════════════════╗
+          ║ Remplace ce bloc par :                    ║
+          ║ <img src="ton-logo.png" style="height:30px"> ║
+          ╚════════════════════════════════════════════╝
+        -->
+        <div class="w-8 h-8 flex items-center justify-center flex-shrink-0">
+          <img src="LogoSCP-removebg-preview.png" alt="Fondation SCP" style="width:32px;height:32px;object-fit:contain;" />
         </div>
-        <div class="brand-text">
-          <b>Wiki F:SCP</b>
-          <span>Ayinvox Studio — V2</span>
+        <div class="leading-tight">
+          <p class="font-mono text-sm tracking-widest uppercase" style="color:var(--text);">Fondation SCP</p>
+          <p class="font-mono text-[10px] tracking-widest uppercase" style="color:var(--text-faint);">Site-53 · Base de Données</p>
         </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-7">
+        <a class="nav-link" href="#apropos">Accueil</a>
+        <a class="nav-link" href="#equipe">Installation</a>
+        <a class="nav-link" href="#contact">Accès</a>
+      </nav>
+
+      <a href="#contact" class="btn-outline hidden sm:inline-flex">
+        <i data-lucide="fingerprint" class="w-3.5 h-3.5"></i> Se connecter
+      </a>
+    </div>
+
+    <!-- Ticker de classification -->
+    <div class="ticker-wrap">
+      <div class="ticker-track" id="ticker">
+        SITE-53 · OPÉRATIONNEL<span class="dot">◆</span>NIVEAU D'ACCÈS 3 REQUIS<span class="dot">◆</span>CLASSIFICATION : RESTREINTE<span class="dot">◆</span>187 OBJETS RÉPERTORIÉS<span class="dot">◆</span>PROTOCOLE DE CONFINEMENT ACTIF<span class="dot">◆</span>O5 COMMAND · SUPERVISION<span class="dot">◆</span>
+        SITE-53 · OPÉRATIONNEL<span class="dot">◆</span>NIVEAU D'ACCÈS 3 REQUIS<span class="dot">◆</span>CLASSIFICATION : RESTREINTE<span class="dot">◆</span>187 OBJETS RÉPERTORIÉS<span class="dot">◆</span>PROTOCOLE DE CONFINEMENT ACTIF<span class="dot">◆</span>O5 COMMAND · SUPERVISION<span class="dot">◆</span>
       </div>
-      <nav class="desktop-nav" id="desktop-nav"></nav>
-      <button class="burger" id="burger-btn" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
-    <nav class="mobile-nav" id="mobile-nav"></nav>
   </header>
 
-  <main id="main-content"></main>
+  <main class="pt-[104px]" id="top">
 
-  <footer>SCIPNET © FONDATION SCP — DOCUMENT À USAGE INTERNE — AYINVOX STUDIO</footer>
-</div>
+    <!-- =========================================================
+         HERO
+         ========================================================= -->
+    <section class="relative hero-grid min-h-[88vh] flex flex-col items-center justify-center px-6 overflow-hidden">
+      <div class="scan-line"></div>
+      <div class="absolute inset-0 hero-vignette pointer-events-none"></div>
 
-<!-- Modal générique -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal-box" id="modal-box"></div>
-</div>
-
-<script>
-/* ============================================================
-   DONNÉES — à étendre librement
-   ============================================================ */
-
-const TABS = [
-  {id:'accueil', label:'Accueil'},
-  {id:'info-global', label:'Informations Global'},
-  {id:'organigramme', label:'Organigramme F:SCP'},
-  {id:'protocoles', label:'Protocoles & Procédures'},
-  {id:'installations', label:'Installations'},
-  {id:'departements', label:'Départements'},
-  {id:'objets-scp', label:'Objet SCP'},
-  {id:'gdi', label:'Groupe d\'Intérêt'},
-];
-
-const NEWS = [
-  {date:'04.07.2026', title:'Rotation du personnel de niveau 3 achevée sur trois sites majeurs.'},
-  {date:'29.06.2026', title:'Incident mineur au Site-53 — enquête interne close, rapport classifié.'},
-  {date:'21.06.2026', title:'Nouvelle procédure de confinement validée pour la classe Keter.'},
-  {date:'12.06.2026', title:'Exercice de simulation de brèche réussi sur l\'ensemble des sites pilotes.'},
-];
-
-const DIRECTOR_NOTE = `Personnel de la Fondation,
-
-La discipline de confinement reste notre unique rempart. Chaque
-anomalie documentée sur ce réseau représente une menace neutralisée
-par le sacrifice de ceux qui nous ont précédés.
-
-Restez vigilants. Restez discrets.
-
-— Direction de Zone, Ayinvox Studio`;
-
-const INSTALLATIONS = [
-  {
-    id:'site-53', name:'Site-53', code:'FR-53',
-    desc:`Installation de confinement et de recherche de classe standard, implantée en zone semi-rurale. Le Site-53 héberge plusieurs unités de confinement de classe Euclide ainsi qu'un pôle de recherche mémétique. L'établissement dispose d'un protocole de verrouillage total en cas de brèche majeure, ainsi que d'une unité MTF permanente en soutien rapproché.`
-  },
-  {
-    id:'site-19', name:'Site-19', code:'US-19',
-    desc:`L'un des plus grands centres administratifs et de confinement de la Fondation. Le Site-19 regroupe les archives centrales, plusieurs laboratoires de haute sécurité et un nombre important d'anomalies de classe Keter sous surveillance continue.`
-  },
-  {
-    id:'area-14', name:'Area-14', code:'US-14',
-    desc:`Installation militaire reconvertie, spécialisée dans le confinement d'anomalies à composante physique ou mécanique. L'Area-14 est reconnue pour son atelier d'ingénierie de confinement, produisant nombre des dispositifs standards utilisés à travers le réseau.`
-  },
-  {
-    id:'site-88', name:'Site-88', code:'FR-88',
-    desc:`Centre de recherche biologique et médicale de taille moyenne. Le Site-88 est spécialisé dans l'étude des anomalies organiques et entretient une collaboration étroite avec le Département Médical central.`
-  },
-];
-
-const DEPARTMENTS = [
-  {
-    id:'securite', name:'Sécurité', color:'var(--red)',
-    mission:'Assure la protection physique des installations, la réponse aux brèches de confinement et la neutralisation des menaces internes comme externes.',
-    hierarchie:'Directeur de la Sécurité → Commandants MTF → Chefs d\'unité → Agents de terrain.'
-  },
-  {
-    id:'scientifique', name:'Scientifique', color:'var(--accent)',
-    mission:'Conduit la recherche fondamentale et appliquée sur les anomalies, développe les procédures de confinement et documente chaque spécimen.',
-    hierarchie:'Chercheur en Chef → Superviseurs de recherche → Chercheurs seniors → Chercheurs juniors.'
-  },
-  {
-    id:'medical', name:'Médical', color:'var(--green)',
-    mission:'Garantit le suivi sanitaire du personnel, la prise en charge des sujets de test et la gestion des expositions anomales.',
-    hierarchie:'Médecin-Chef → Chirurgiens seniors → Personnel infirmier → Techniciens médicaux.'
-  },
-  {
-    id:'administratif', name:'Administratif', color:'var(--blue)',
-    mission:'Gère la logistique, les ressources humaines, les finances et la coordination inter-sites de l\'ensemble du réseau de la Fondation.',
-    hierarchie:'Directeur de Zone → Responsables de département → Coordinateurs administratifs → Personnel de soutien.'
-  },
-];
-
-const GDI = [
-  {
-    id:'goc', name:'Coalition Occulte Mondiale', relation:'cooperatif',
-    histoire:'Organe supranational reconnu par de nombreux gouvernements, la Coalition Occulte Mondiale (GOC) partage occasionnellement des renseignements avec la Fondation face à des menaces communes, tout en conservant des objectifs et une doctrine propres.'
-  },
-  {
-    id:'wilsons', name:'Wilson\'s Wildlife Solutions', relation:'neutre',
-    histoire:'Organisation façade spécialisée dans la capture d\'entités anormales à des fins commerciales. Sa relation avec la Fondation oscille entre indifférence et opportunisme, sans hostilité affirmée.'
-  },
-  {
-    id:'insurrection', name:'Insurrection du Chaos', relation:'hostile',
-    histoire:'Faction armée prônant la divulgation publique de toutes les anomalies. Responsable de multiples assauts contre des installations de la Fondation, elle est classée comme menace active de premier ordre.'
-  },
-  {
-    id:'main-du-serpent', name:'La Main du Serpent', relation:'neutre',
-    histoire:'Collectif nomade défendant l\'autonomie des entités anormales sensibles. Évite généralement la confrontation directe avec la Fondation, préférant l\'exfiltration discrète de sujets.'
-  },
-];
-
-const CONTAINMENT_CLASSES = [
-  {name:'Sûr', level:null, color:'var(--c-safe)', desc:'Anomalie comprise et confinée de façon fiable et durable, avec un minimum de ressources.'},
-  {name:'Euclide', level:null, color:'var(--c-euclid)', desc:'Anomalie partiellement comprise, dont le comportement reste imprévisible ; nécessite des procédures de confinement actives.'},
-  {name:'Keter', level:null, color:'var(--c-keter)', desc:'Anomalie difficile à confiner de façon fiable, représentant une menace sérieuse d\'évasion ou de brèche.'},
-  {name:'Neutralisé', level:null, color:'var(--c-neutralized)', desc:'Anomalie ayant perdu ses propriétés anormales ou ayant été détruite ; ne nécessite plus de confinement actif.'},
-];
-
-const RISK_CLASSES = [
-  {name:'Notice', level:1, color:'var(--c-notice)', desc:'Anomalie ne présentant aucun risque significatif pour le personnel informé de son existence.'},
-  {name:'Caution', level:2, color:'var(--c-caution)', desc:'Anomalie pouvant présenter un risque limité si les procédures ne sont pas respectées.'},
-  {name:'Warning', level:3, color:'var(--c-warning)', desc:'Anomalie présentant un risque modéré ; une exposition non autorisée peut causer un préjudice.'},
-  {name:'Danger', level:4, color:'var(--c-danger)', desc:'Anomalie présentant un risque élevé pour toute personne à proximité, formée ou non.'},
-  {name:'Critical', level:5, color:'var(--c-critical)', desc:'Anomalie présentant un risque extrême et immédiat pour la vie du personnel exposé.'},
-  {name:'Apollyon', level:6, color:'var(--c-apollyon)', desc:'Anomalie dont l\'évasion ou l\'activation représenterait un risque existentiel à l\'échelle mondiale.'},
-];
-
-const DISRUPTION_CLASSES = [
-  {name:'Dark', level:1, color:'var(--c-dark)', desc:'Impact perturbateur négligeable ; l\'existence de l\'anomalie n\'a aucune incidence sur la normalité perçue.'},
-  {name:'Vlam', level:2, color:'var(--c-vlam)', desc:'Impact perturbateur faible, gérable par des mesures d\'amnésie ou de désinformation classiques.'},
-  {name:'Keneq', level:3, color:'var(--c-keneq)', desc:'Impact perturbateur modéré, nécessitant une intervention mémétique ou médiatique ciblée.'},
-  {name:'Ekhi', level:4, color:'var(--c-ekhi)', desc:'Impact perturbateur élevé, susceptible d\'affecter la perception collective à l\'échelle régionale.'},
-  {name:'Amida', level:5, color:'var(--c-amida)', desc:'Impact perturbateur sévère, menaçant la stabilité du voile de normalité à grande échelle.'},
-];
-
-const THREAT_LEVELS = [
-  {name:'Faible', level:null, color:'var(--c-faible)', desc:'Menace ne nécessitant pas de mobilisation particulière des ressources de la Fondation.'},
-  {name:'Modéré', level:null, color:'var(--c-modere)', desc:'Menace nécessitant une surveillance active et une réponse coordonnée à l\'échelle locale.'},
-  {name:'Élevé', level:null, color:'var(--c-eleve)', desc:'Menace nécessitant la mobilisation de MTF spécialisées et une réponse inter-sites.'},
-  {name:'Extrême', level:null, color:'var(--c-extreme)', desc:'Menace nécessitant une réponse totale de la Fondation, pouvant impliquer plusieurs zones simultanément.'},
-];
-
-const SCP_OBJECTS = [
-  {
-    id:'SCP-173', title:'La Sculpture', containment:'Euclide', risk:'Danger', disruption:'Vlam',
-    desc:`SCP-173 est une statue en béton armé et acier ne pouvant se déplacer que lorsqu'elle n'est observée directement par aucun être vivant. Tout contact visuel doit être maintenu en permanence par le personnel présent dans la salle de confinement. Le clignement des yeux ne compte pas comme perte de contact visuel.`
-  },
-  {
-    id:'SCP-096', title:'"Le Timide"', containment:'Euclide', risk:'Critical', disruption:'Ekhi',
-    desc:`SCP-096 est une entité humanoïde de grande taille entrant dans un état de détresse extrême si son visage est observé, directement ou indirectement. L'entité poursuivra alors sans relâche toute personne ayant vu son visage jusqu'à son élimination.`
-  },
-  {
-    id:'SCP-682', title:'Reptile Increvable', containment:'Keter', risk:'Apollyon', disruption:'Amida',
-    desc:`SCP-682 est un grand reptile présentant une haine viscérale envers toute forme de vie. L'entité possède des capacités de régénération et d'adaptation extrêmes, rendant sa destruction définitive à ce jour impossible. Son confinement repose sur une immersion permanente en solution acide.`
-  },
-  {
-    id:'SCP-999', title:'La Chose Chatouilleuse', containment:'Sûr', risk:'Notice', disruption:'Dark',
-    desc:`SCP-999 est une masse gélatineuse de couleur orange dégageant une odeur agréable et manifestant un comportement affectueux envers les êtres vivants. Aucune propriété dangereuse n'a été recensée à ce jour.`
-  },
-  {
-    id:'SCP-966', title:'Entité Onirique Prédatrice', containment:'Euclide', risk:'Danger', disruption:'Keneq',
-    desc:`SCP-966 désigne une classe d'entités invisibles à l'œil nu se nourrissant de l'activité cérébrale de sujets endormis. Seule une exposition prolongée à la caféine permet de percevoir ces entités.`
-  },
-  {
-    id:'SCP-053', title:'La Petite Fille', containment:'Euclide', risk:'Warning', disruption:'Vlam',
-    desc:`SCP-053 se manifeste sous l'apparence d'une fillette d'environ six ans dont l'âge apparent n'évolue jamais. Toute personne restant en sa présence plus de quelques minutes développe un attachement affectif intense et irrationnel envers elle.`
-  },
-];
-
-/* ============================================================
-   PART 1 — GATE D'AUTHENTIFICATION
-   ============================================================ */
-
-// Hash SHA-256 du mot de passe "SCIPNET-53" — évite d'exposer le mot de passe en clair.
-const PASSWORD_HASH = 'd5a05d3a12d8e6d2b76dc474852b3c46433cc30c89b828da2b4c320c3094bad7';
-
-async function sha256Hex(text){
-  const enc = new TextEncoder().encode(text);
-  const buf = await crypto.subtle.digest('SHA-256', enc);
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-
-const gateForm = document.getElementById('gate');
-const gateInput = document.getElementById('gate-password');
-const gateError = document.getElementById('gate-error');
-const gateSubmit = document.getElementById('gate-submit');
-
-async function tryAuth(){
-  const val = gateInput.value.trim();
-  if(!val){ showGateError(); return; }
-  const hash = await sha256Hex(val);
-  if(hash === PASSWORD_HASH){
-    gateError.classList.remove('show');
-    gateForm.classList.add('fade-out');
-    setTimeout(()=>{
-      gateForm.classList.add('hidden');
-      startTerminal();
-    }, 600);
-  } else {
-    showGateError();
-  }
-}
-function showGateError(){
-  gateError.classList.remove('show');
-  // force reflow pour relancer l'animation de secousse
-  void gateError.offsetWidth;
-  gateError.classList.add('show');
-}
-gateSubmit.addEventListener('click', tryAuth);
-gateInput.addEventListener('keydown', e=>{ if(e.key === 'Enter') tryAuth(); });
-
-/* ============================================================
-   PART 2 — TERMINAL SCIPNET (effet machine à écrire)
-   ============================================================ */
-
-const TERMINAL_LINES = [
-  {text:'SCIPNET — FALSTENCY NETWORK', prompt:false},
-  {text:'INITIALISATION DU TERMINAL', prompt:false},
-  {text:'--------------------------------------', prompt:false},
-  {text:'Connexion sécurisée au réseau SCIPNET...', prompt:true},
-  {text:'Vérification du protocole d\'authentification... OK', prompt:true},
-  {text:'Récupération de votre identité Discord... OK', prompt:true},
-  {text:'Analyse des accréditations multi-serveurs...', prompt:true},
-  {text:'Lancement de l\'agent mémétique, vérification...', prompt:true},
-  {text:'Décryptage des permissions...', prompt:true},
-  {text:'Niveau d\'accréditation : 3', prompt:true},
-  {text:'Connexion réussie. Bienvenue.', prompt:true},
-];
-
-function startTerminal(){
-  const terminal = document.getElementById('terminal');
-  const linesEl = document.getElementById('term-lines');
-  terminal.classList.remove('hidden');
-  linesEl.innerHTML = '';
-
-  let i = 0;
-  function nextLine(){
-    if(i >= TERMINAL_LINES.length){
-      // ligne finale + curseur clignotant
-      const cursor = document.createElement('span');
-      cursor.className = 'term-cursor';
-      linesEl.appendChild(cursor);
-      setTimeout(()=>{
-        terminal.classList.add('fade-out');
-        setTimeout(()=>{
-          terminal.classList.add('hidden');
-          launchApp();
-        }, 650);
-      }, 1500);
-      return;
-    }
-    const lineData = TERMINAL_LINES[i];
-    const lineDiv = document.createElement('div');
-    if(lineData.prompt){
-      const promptSpan = document.createElement('span');
-      promptSpan.className = 'term-line-prompt';
-      promptSpan.textContent = '> ';
-      lineDiv.appendChild(promptSpan);
-    }
-    const textSpan = document.createElement('span');
-    lineDiv.appendChild(textSpan);
-    linesEl.appendChild(lineDiv);
-
-    let charIndex = 0;
-    const fullText = lineData.text;
-    function typeChar(){
-      if(charIndex < fullText.length){
-        textSpan.textContent += fullText[charIndex];
-        charIndex++;
-        linesEl.scrollTop = linesEl.scrollHeight;
-        setTimeout(typeChar, 14);
-      } else {
-        i++;
-        const delay = 300 + Math.random()*300; // 300–600ms
-        setTimeout(nextLine, delay);
-      }
-    }
-    typeChar();
-  }
-  nextLine();
-}
-
-/* ============================================================
-   PART 3 — APPLICATION WIKI (SPA)
-   ============================================================ */
-
-function launchApp(){
-  const app = document.getElementById('app');
-  app.classList.add('visible');
-  app.classList.add('fade-in');
-  buildNav();
-  buildAllSections();
-  goToTab('accueil');
-}
-
-function buildNav(){
-  const desktopNav = document.getElementById('desktop-nav');
-  const mobileNav = document.getElementById('mobile-nav');
-  desktopNav.innerHTML = '';
-  mobileNav.innerHTML = '';
-  TABS.forEach(tab=>{
-    const btnD = document.createElement('button');
-    btnD.textContent = tab.label;
-    btnD.dataset.tab = tab.id;
-    btnD.addEventListener('click', ()=>goToTab(tab.id));
-    desktopNav.appendChild(btnD);
-
-    const btnM = document.createElement('button');
-    btnM.textContent = tab.label;
-    btnM.dataset.tab = tab.id;
-    btnM.addEventListener('click', ()=>{ goToTab(tab.id); closeMobileNav(); });
-    mobileNav.appendChild(btnM);
-  });
-}
-
-const burgerBtn = document.getElementById('burger-btn');
-const mobileNavEl = document.getElementById('mobile-nav');
-burgerBtn.addEventListener('click', ()=>{
-  burgerBtn.classList.toggle('open');
-  mobileNavEl.classList.toggle('open');
-});
-function closeMobileNav(){
-  burgerBtn.classList.remove('open');
-  mobileNavEl.classList.remove('open');
-}
-
-function goToTab(tabId){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  const target = document.getElementById('sec-'+tabId);
-  if(target) target.classList.add('active');
-  document.querySelectorAll('[data-tab]').forEach(btn=>{
-    btn.classList.toggle('active', btn.dataset.tab === tabId);
-  });
-  window.scrollTo({top:0, behavior:'instant'});
-}
-
-/* ---- Construction des sections ---- */
-
-function buildAllSections(){
-  const main = document.getElementById('main-content');
-  main.innerHTML = `
-    ${sectionHead('accueil','Bienvenue','Accueil')}
-    ${sectionHead('info-global','Documentation','Informations Global', true)}
-    ${sectionHead('organigramme','Structure','Organigramme F:SCP', true)}
-    ${sectionHead('protocoles','Réglementation','Protocoles & Procédures', true)}
-    ${sectionHead('installations','Réseau de sites','Installations')}
-    ${sectionHead('departements','Structure interne','Départements')}
-    ${sectionHead('objets-scp','Base de données anormale','Objet SCP')}
-    ${sectionHead('gdi','Renseignement','Groupe d\'Intérêt')}
-  `;
-  document.getElementById('sec-accueil').innerHTML += renderAccueil();
-  document.getElementById('sec-info-global').innerHTML += renderDevNotice();
-  document.getElementById('sec-organigramme').innerHTML += renderDevNotice();
-  document.getElementById('sec-protocoles').innerHTML += renderDevNotice();
-  document.getElementById('sec-installations').innerHTML += renderInstallations();
-  document.getElementById('sec-departements').innerHTML += renderDepartments();
-  document.getElementById('sec-objets-scp').innerHTML += renderACSAndRegistry();
-  document.getElementById('sec-gdi').innerHTML += renderGDI();
-
-  attachInstallationEvents();
-  attachDepartmentEvents();
-  attachACSEvents();
-  attachSCPEvents();
-  attachGDIEvents();
-}
-
-function sectionHead(id, eyebrow, title, devOnly){
-  return `<section class="section" id="sec-${id}">
-    <div class="section-head">
-      <div class="section-eyebrow">${eyebrow}</div>
-      <div class="section-title">${title}</div>
-    </div>
-  </section>`;
-}
-
-function renderDevNotice(){
-  return `<div class="dev-notice">
-    <div class="logo-wrap dev-spinner" style="width:72px;height:72px;">
-      <img src="" alt="Logo Fondation" onerror="this.style.display='none'">
-      <span class="logo-fallback">${placeholderIconSVG()}</span>
-    </div>
-    <b>En Développement...</b>
-    <span>CETTE SECTION SERA DISPONIBLE DANS UNE PROCHAINE MISE À JOUR</span>
-  </div>`;
-}
-
-function renderAccueil(){
-  const newsHTML = NEWS.map(n=>`
-    <div class="news-item">
-      <div class="news-date">${n.date}</div>
-      <div class="news-title">${n.title}</div>
-    </div>`).join('');
-  return `<div class="home-grid">
-    <div class="panel">
-      <h3>Bulletin d'information</h3>
-      <p>Bienvenue sur le réseau SCIPNET V2 de la Fondation, Ayinvox Studio. Cette interface centralise l'ensemble de la documentation accessible à votre niveau d'accréditation. Toute anomalie dans l'affichage doit être signalée à l'administration technique.</p>
-      ${newsHTML}
-    </div>
-    <div class="panel">
-      <h3>Notes du Directeur de Zone</h3>
-      <div class="director-note">${DIRECTOR_NOTE}</div>
-    </div>
-  </div>`;
-}
-
-function renderInstallations(){
-  const rows = INSTALLATIONS.map(inst=>`
-    <tr data-id="${inst.id}">
-      <td>
-        <div class="row-logo">
-          ${logoWrap(inst.name)}
-          <span>${inst.name}</span>
-        </div>
-      </td>
-      <td>${inst.code}</td>
-    </tr>`).join('');
-  return `<table class="data-table">
-    <thead><tr><th>Nom de la structure</th><th>Code</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
-
-function renderDepartments(){
-  const cards = DEPARTMENTS.map(d=>`
-    <div class="dept-card" data-id="${d.id}" style="color:${d.color}">
-      <div class="accent-bar" style="background:${d.color}"></div>
-      ${logoWrap(d.name,'lg')}
-      <b style="color:var(--text)">${d.name}</b>
-      <span>Département</span>
-    </div>`).join('');
-  return `<div class="dept-grid">${cards}</div>`;
-}
-
-function renderGDI(){
-  const relationMap = {
-    cooperatif:{label:'Coopératif', color:'var(--c-cooperatif)'},
-    neutre:{label:'Neutre / Indéterminé', color:'var(--c-neutre)'},
-    hostile:{label:'Hostile / Menace', color:'var(--c-hostile)'},
-  };
-  const rows = GDI.map(g=>{
-    const r = relationMap[g.relation];
-    return `<tr data-id="${g.id}">
-      <td>
-        <div class="row-logo">
-          ${logoWrap(g.name)}
-          <span>${g.name}</span>
-        </div>
-      </td>
-      <td><span class="badge" style="color:${r.color}"><span class="badge-dot"></span>${r.label}</span></td>
-    </tr>`;
-  }).join('');
-  return `<table class="data-table">
-    <thead><tr><th>Nom</th><th>Relation avec la Fondation</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
-
-function renderACSAndRegistry(){
-  return `
-    <div class="acs-hub">
-      ${acsGroup('Classes de Confinement', CONTAINMENT_CLASSES, 'containment')}
-      ${acsGroup('Classes de Risque', RISK_CLASSES, 'risk')}
-      ${acsGroup('Classes de Perturbation', DISRUPTION_CLASSES, 'disruption')}
-      ${acsGroup('Niveaux de Menace', THREAT_LEVELS, 'threat')}
-    </div>
-    <div class="section-head" style="margin-top:10px;">
-      <div class="section-eyebrow">Base de données</div>
-      <div class="section-title" style="font-size:20px;">Registre des Anomalies</div>
-    </div>
-    ${renderSCPTable()}
-  `;
-}
-
-function acsGroup(title, list, group){
-  const rows = list.map((c,idx)=>`
-    <div class="acs-row" data-group="${group}" data-index="${idx}">
-      <div class="acs-color-bar" style="background:${c.color}"></div>
-      <div class="acs-row-body">
-        <div class="acs-icon" style="color:${c.color}">
-          <img src="" alt="Icône ${c.name}" onerror="this.style.display='none'">
-          <span class="logo-fallback">${placeholderIconSVG()}</span>
-        </div>
-        <div class="acs-row-name">${c.name}</div>
-        ${c.level!==null && c.level!==undefined ? `<div class="acs-row-level" style="color:${c.color}">${c.level}</div>` : ''}
+      <!-- Logo en filigrane -->
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0" aria-hidden="true">
+        <img src="LogoSCP-removebg-preview.png" alt="" style="width: min(65vw, 520px); height: min(65vw, 520px); object-fit: contain; opacity: 0.07; filter: brightness(2);" />
       </div>
-    </div>`).join('');
-  return `<div>
-    <div class="acs-group-title">${title}</div>
-    <div class="acs-rows">${rows}</div>
-  </div>`;
-}
 
-function renderSCPTable(){
-  const classColor = {
-    'Sûr':'var(--c-safe)','Euclide':'var(--c-euclid)','Keter':'var(--c-keter)','Neutralisé':'var(--c-neutralized)',
-    'Notice':'var(--c-notice)','Caution':'var(--c-caution)','Warning':'var(--c-warning)','Danger':'var(--c-danger)','Critical':'var(--c-critical)','Apollyon':'var(--c-apollyon)',
-    'Dark':'var(--c-dark)','Vlam':'var(--c-vlam)','Keneq':'var(--c-keneq)','Ekhi':'var(--c-ekhi)','Amida':'var(--c-amida)'
-  };
-  const rows = SCP_OBJECTS.map(s=>`
-    <tr data-id="${s.id}">
-      <td><b>${s.id}</b><br><span style="color:var(--text-faint);font-size:12px;">${s.title}</span></td>
-      <td><span class="badge" style="color:${classColor[s.containment]}"><span class="badge-dot"></span>${s.containment}</span></td>
-      <td><span class="badge" style="color:${classColor[s.risk]}"><span class="badge-dot"></span>${s.risk}</span></td>
-      <td><span class="badge" style="color:${classColor[s.disruption]}"><span class="badge-dot"></span>${s.disruption}</span></td>
-    </tr>`).join('');
-  return `<table class="data-table">
-    <thead><tr><th>Identifiant</th><th>Confinement</th><th>Risque</th><th>Perturbation</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
+      <div class="relative z-10 text-center max-w-3xl mx-auto">
+        <h1 class="font-display uppercase leading-[0.95] mb-5" style="font-size:clamp(2.6rem,7vw,5rem); color:var(--text); letter-spacing:0.01em;">
+          Fondation <span style="color:var(--accent);">SCP</span>
+        </h1>
 
-// Emplacement de logo générique : l'utilisateur remplace src="" par le
-// chemin de sa propre image. Tant qu'aucune image n'est fournie, une icône
-// neutre de type "placeholder" reste visible en arrière-plan.
-function placeholderIconSVG(){
-  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-    <rect x="3" y="3" width="18" height="18" rx="2"/>
-    <circle cx="8.5" cy="8.5" r="1.4" fill="currentColor" stroke="none"/>
-    <path d="M21 16l-5.5-5.5-4 4L8 11l-5 5"/>
-  </svg>`;
-}
+        <p class="font-mono text-sm sm:text-base mb-3 cursor-blink" style="color:var(--text-dim);">
+          Sécuriser. Contenir. Protéger.
+        </p>
+        <p class="max-w-xl mx-auto mb-10" style="color:var(--text-dim);">
+          Base de données officielle du Site-53. Consultez les dossiers d'objets anomaux,
+          les protocoles de confinement et la structure du personnel autorisé.
+        </p>
 
-function logoWrap(name, size){
-  return `<div class="logo-wrap ${size==='lg'?'lg':''}">
-    <img src="" alt="Logo ${name}" onerror="this.style.display='none'">
-    <span class="logo-fallback">${placeholderIconSVG()}</span>
-  </div>`;
-}
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a href="#objets" class="btn-primary">
+            <i data-lucide="folder-search" class="w-3.5 h-3.5"></i> Consulter les dossiers
+          </a>
+          <a href="#contact" class="btn-outline">
+            <i data-lucide="key-round" class="w-3.5 h-3.5"></i> Demander l'accès
+          </a>
+        </div>
+      </div>
+    </section>
 
-/* ---- Événements : ouverture des modales ---- */
+    <!-- =========================================================
+         À PROPOS + STATS
+         ========================================================= -->
+    <section id="apropos" class="max-w-6xl mx-auto px-6 py-24 relative z-10">
+      <p class="tag-class mb-2">§ 01 — À propos</p>
+      <h2 class="font-display uppercase mb-10" style="font-size:clamp(1.6rem,3.2vw,2.4rem); color:var(--text);">
+        Une institution vouée<br/><span style="color:var(--accent);">à l'inexpliqué</span>
+      </h2>
 
-function attachInstallationEvents(){
-  document.querySelectorAll('#sec-installations tbody tr').forEach(row=>{
-    row.addEventListener('click', ()=>{
-      const inst = INSTALLATIONS.find(i=>i.id===row.dataset.id);
-      openModal({
-        eyebrow:'Installation — '+inst.code,
-        title:inst.name,
-        bodyHTML:`<p class="modal-body-text">${inst.desc}</p>`,
-      });
-    });
-  });
-}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+        <p style="color:var(--text-dim);" class="leading-relaxed">
+          Le Site-53 est une installation de confinement dédiée à la sécurisation d'entités,
+          d'objets et de phénomènes qui contreviennent aux lois naturelles connues. Sous la
+          supervision du Conseil O5, le personnel autorisé y étudie, contient et neutralise
+          les menaces anormales avant qu'elles n'atteignent la population civile.
+        </p>
+        <p style="color:var(--text-dim);" class="leading-relaxed">
+          Cette base de données recense les dossiers déclassifiés du site : objets sous
+          contrôle, incidents documentés et structure du personnel. L'accès à certains
+          contenus est conditionné à un niveau d'habilitation suffisant.
+        </p>
+      </div>
 
-function attachDepartmentEvents(){
-  document.querySelectorAll('.dept-card').forEach(card=>{
-    card.addEventListener('click', ()=>{
-      const d = DEPARTMENTS.find(x=>x.id===card.dataset.id);
-      openModal({
-        eyebrow:'Département',
-        title:d.name,
-        bodyHTML:`
-          <p class="modal-body-text"><b>Missions —</b> ${d.mission}</p>
-          <div class="modal-divider"></div>
-          <p class="modal-body-text"><b>Hiérarchie —</b> ${d.hierarchie}</p>`,
-        color:d.color,
-      });
-    });
-  });
-}
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+        <div class="stat-block">
+          <p class="font-display text-3xl" style="color:var(--accent);">187</p>
+          <p class="tag-class mt-1">Objets répertoriés</p>
+        </div>
+        <div class="stat-block">
+          <p class="font-display text-3xl" style="color:var(--accent);">64</p>
+          <p class="tag-class mt-1">Personnel actif</p>
+        </div>
+        <div class="stat-block">
+          <p class="font-display text-3xl" style="color:var(--accent);">05</p>
+          <p class="tag-class mt-1">Niveau d'accès max.</p>
+        </div>
+        <div class="stat-block">
+          <p class="font-display text-3xl" style="color:var(--accent);">03</p>
+          <p class="tag-class mt-1">Incidents · 2026</p>
+        </div>
+      </div>
+    </section>
 
-function attachGDIEvents(){
-  document.querySelectorAll('#sec-gdi tbody tr').forEach(row=>{
-    row.addEventListener('click', ()=>{
-      const g = GDI.find(x=>x.id===row.dataset.id);
-      openModal({
-        eyebrow:'Groupe d\'Intérêt',
-        title:g.name,
-        bodyHTML:`<p class="modal-body-text">${g.histoire}</p>`,
-      });
-    });
-  });
-}
+    <hr class="divider max-w-6xl mx-auto" />
 
-function attachSCPEvents(){
-  document.querySelectorAll('#sec-objets-scp tbody tr').forEach(row=>{
-    row.addEventListener('click', ()=>{
-      const s = SCP_OBJECTS.find(x=>x.id===row.dataset.id);
-      openModal({
-        eyebrow:'Fiche de confinement',
-        title:s.id+' — '+s.title,
-        bodyHTML:`
-          <div class="modal-badges">
-            <span class="badge" style="color:var(--accent)">Confinement : ${s.containment}</span>
-            <span class="badge" style="color:var(--red)">Risque : ${s.risk}</span>
-            <span class="badge" style="color:var(--blue)">Perturbation : ${s.disruption}</span>
+    <!-- =========================================================
+         APERÇU DE L'INSTALLATION
+         ========================================================= -->
+    <section id="equipe" class="max-w-6xl mx-auto px-6 py-24 relative z-10">
+      <p class="tag-class mb-2">§ 02 — Installation</p>
+      <h2 class="font-display uppercase mb-10" style="font-size:clamp(1.6rem,3.2vw,2.4rem); color:var(--text);">
+        Aperçu du Site-53
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!--
+          ╔══════════════════════════════════════════════════════╗
+          ║  IMAGE 1 — Remplace ce bloc par :                    ║
+          ║  <img src="ton-image-1.jpg" class="w-full h-full object-cover">
+          ╚══════════════════════════════════════════════════════╝
+        -->
+        <div class="object-card overflow-hidden" style="aspect-ratio: 4/3;">
+          <div class="w-full h-full flex items-center justify-center" style="background:var(--bg-raised);">
+            <i data-lucide="image" class="w-8 h-8" style="color:var(--text-faint);"></i>
           </div>
-          <div class="modal-divider"></div>
-          <p class="modal-body-text">${s.desc}</p>
-          <div class="modal-divider"></div>
-          <p class="modal-body-text" style="font-family:var(--font-mono);font-size:12px;">
-            Accès complémentaire : <span class="redacted">░░░░░░░░░░░░</span>
-          </p>`,
-      });
-    });
-  });
-}
+        </div>
 
-function attachACSEvents(){
-  const groups = {containment:CONTAINMENT_CLASSES, risk:RISK_CLASSES, disruption:DISRUPTION_CLASSES, threat:THREAT_LEVELS};
-  document.querySelectorAll('.acs-row').forEach(row=>{
-    row.addEventListener('click', ()=>{
-      const list = groups[row.dataset.group];
-      const c = list[parseInt(row.dataset.index,10)];
-      openModal({
-        eyebrow:'Système ACS',
-        title:c.name,
-        bodyHTML:`<p class="modal-body-text">${c.desc}</p>`,
-        color:c.color,
-      });
-    });
-  });
-}
+        <!--
+          ╔══════════════════════════════════════════════════════╗
+          ║  IMAGE 2 — Remplace ce bloc par :                    ║
+          ║  <img src="ton-image-2.jpg" class="w-full h-full object-cover">
+          ╚══════════════════════════════════════════════════════╝
+        -->
+        <div class="object-card overflow-hidden" style="aspect-ratio: 4/3;">
+          <div class="w-full h-full flex items-center justify-center" style="background:var(--bg-raised);">
+            <i data-lucide="image" class="w-8 h-8" style="color:var(--text-faint);"></i>
+          </div>
+        </div>
+      </div>
+    </section>
 
-/* ---- Modale générique ---- */
+    <hr class="divider max-w-6xl mx-auto" />
 
-const modalOverlay = document.getElementById('modal-overlay');
-const modalBox = document.getElementById('modal-box');
+    <!-- =========================================================
+         CONTACT / ACCÈS
+         ========================================================= -->
+    <section id="contact" class="max-w-6xl mx-auto px-6 py-24 relative z-10">
+      <p class="tag-class mb-2">§ 03 — Accès</p>
+      <h2 class="font-display uppercase mb-10" style="font-size:clamp(1.6rem,3.2vw,2.4rem); color:var(--text);">
+        Canaux Officiels
+      </h2>
 
-function openModal({eyebrow, title, bodyHTML, color}){
-  modalBox.innerHTML = `
-    <div class="modal-watermark">
-      <img src="" alt="" onerror="this.style.display='none'">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <a href="#" target="_blank" rel="noopener" class="object-card p-8 block">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-10 h-10 border flex items-center justify-center" style="border-color:var(--border);">
+              <i data-lucide="message-circle" class="w-5 h-5" style="color:var(--text-dim);"></i>
+            </div>
+            <div>
+              <p class="tag-class mb-0.5">Canal 01</p>
+              <span class="font-mono text-xs uppercase tracking-wider" style="color:var(--text);">Discord</span>
+            </div>
+          </div>
+          <p class="font-mono text-sm mb-1" style="color:var(--text-dim);">Serveur communautaire du Site-53</p>
+          <div class="flex items-center gap-2 mt-6" style="color:var(--text-faint);">
+            <span class="font-mono text-xs uppercase tracking-wider">Rejoindre</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </div>
+        </a>
+
+        <a href="mailto:contact@site-53.fr" class="object-card p-8 block">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-10 h-10 border flex items-center justify-center" style="border-color:var(--border);">
+              <i data-lucide="mail" class="w-5 h-5" style="color:var(--text-dim);"></i>
+            </div>
+            <div>
+              <p class="tag-class mb-0.5">Canal 02</p>
+              <span class="font-mono text-xs uppercase tracking-wider" style="color:var(--text);">Email</span>
+            </div>
+          </div>
+          <p class="font-mono text-sm mb-1" style="color:var(--text-dim);">Demandes officielles &amp; partenariats</p>
+          <div class="flex items-center gap-2 mt-6" style="color:var(--text-faint);">
+            <span class="font-mono text-xs uppercase tracking-wider">Envoyer un mail</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       FOOTER
+       ========================================================= -->
+  <footer class="border-t relative z-10" style="border-color:var(--border-soft); background:var(--bg-panel);">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="font-mono text-[11px]" style="color:var(--text-faint);">© 2026 Fondation SCP — Site-53 · Ayinvox Studio</p>
+      <div class="flex items-center gap-2 font-mono text-[11px]" style="color:var(--safe);">
+        <span class="status-dot online"></span> EN LIGNE
+      </div>
     </div>
-    <button class="modal-close" id="modal-close-btn">✕</button>
-    <div class="modal-content">
-      <div class="modal-eyebrow">${eyebrow}</div>
-      <div class="modal-title" style="${color?'color:'+color+';border-left:3px solid '+color+';padding-left:10px;':''}">${title}</div>
-      ${bodyHTML}
-    </div>
-  `;
-  modalOverlay.classList.add('open');
-  document.getElementById('modal-close-btn').addEventListener('click', closeModal);
-}
-function closeModal(){
-  modalOverlay.classList.remove('open');
-}
-modalOverlay.addEventListener('click', e=>{
-  if(e.target === modalOverlay) closeModal();
-});
-document.addEventListener('keydown', e=>{
-  if(e.key === 'Escape') closeModal();
-});
-</script>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>
